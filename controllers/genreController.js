@@ -6,22 +6,20 @@ var async = require('async');
 exports.genre_list = function (req, res) {
     Genre.find()
         .then((list_genre) => {
-
             res.render('genre_list', {
                 title: 'Genre list',
                 genre_list: list_genre
             })
         })
         .catch(err => console.log(err));
-
 };
 
-// Display detail page for a specific Genre.
 
+// Display detail page for a specific Genre.
 exports.genre_detail = function (req, res, next) {
 
     async.parallel({
-        genre: function (callback) {
+        genre: (callback) => {
             Genre.findById(req.params.id)
                 .exec(callback);
         },
@@ -32,8 +30,7 @@ exports.genre_detail = function (req, res, next) {
                 })
                 .exec(callback);
         },
-
-    }, function (err, results) {
+    }, (err, results) => {
         if (err) {
             return next(err);
         }
@@ -49,7 +46,6 @@ exports.genre_detail = function (req, res, next) {
             genre_books: results.genre_books
         });
     });
-
 };
 
 
