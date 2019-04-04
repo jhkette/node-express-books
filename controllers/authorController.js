@@ -9,8 +9,7 @@ exports.author_list = function(req, res, next) {
         if (err) { return next(err); }
         //Successful, so render
         res.render('author_list', { title: 'Author List', author_list: list_authors });
-      });
-  
+      }); 
   };
 
 // Display detail page for a specific Author.
