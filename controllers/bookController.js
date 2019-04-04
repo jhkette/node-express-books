@@ -3,7 +3,7 @@ var Author = require('../models/author');
 var Genre = require('../models/genre');
 var BookInstance = require('../models/bookinstance');
 var async = require('async');
-exports.index = function(req, res) {   
+exports.index = (req, res) => {   
     
     async.parallel({
         book_count: (callback)  => {
