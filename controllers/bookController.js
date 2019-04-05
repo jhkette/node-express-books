@@ -233,7 +233,7 @@ exports.book_update_post = [
     sanitizeBody('title').escape(),
     sanitizeBody('author').escape(),
     sanitizeBody('summary').escape(),
-    sanitizeBody('isbn').escape(),
+    sanitizeBody('review').escape(),
     sanitizeBody('genre.*').escape(),
 
     // Process request after validation and sanitization.
@@ -247,7 +247,7 @@ exports.book_update_post = [
           { title: req.body.title,
             author: req.body.author,
             summary: req.body.summary,
-            isbn: req.body.isbn,
+            review: req.body.review,
             genre: (typeof req.body.genre==='undefined') ? [] : req.body.genre,
             _id:req.params.id //This is required, or a new ID will be assigned!
            });
