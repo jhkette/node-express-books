@@ -12,6 +12,12 @@ var BookInstanceSchema = new Schema(
   }
 );
 
+BookInstanceSchema
+.virtual('url')
+.get(function () {
+  return '/catalog/bookinstance/'+this._id;
+});
+
 // Virtual for bookinstance's URL
 BookInstanceSchema
 .virtual('due_back_formatted')
