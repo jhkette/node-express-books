@@ -33,7 +33,8 @@ app.use(function(req, res, next) {
 
 
 var mongoose = require('mongoose');
-var mongoDB = 'mongodb+srv://jkette01:Gue55wh0s1n@cluster0-w0njc.mongodb.net/test?retryWrites=true';
+var dev_db_url = 'mongodb+srv://jkette01:Gue55wh0s1n@cluster0-w0njc.mongodb.net/test?retryWrites=true';
+var mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

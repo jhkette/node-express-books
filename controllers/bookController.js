@@ -189,7 +189,7 @@ exports.book_update_get = function(req, res, next) {
         genres: function(callback) {
             Genre.find(callback);
         },
-        }, function(err, results) {
+        }, (err, results) => {
             if (err) { return next(err); }
             if (results.book==null) { // No results.
                 var err = new Error('Book not found');
@@ -227,7 +227,7 @@ exports.book_update_post = [
     body('title', 'Title must not be empty.').isLength({ min: 1 }).trim(),
     body('author', 'Author must not be empty.').isLength({ min: 1 }).trim(),
     body('summary', 'Summary must not be empty.').isLength({ min: 1 }).trim(),
-    body('isbn', 'ISBN must not be empty').isLength({ min: 1 }).trim(),
+    body('review', 'review must not be empty').isLength({ min: 1 }).trim(),
 
     // Sanitize fields.
     sanitizeBody('title').escape(),
