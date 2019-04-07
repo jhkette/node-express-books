@@ -91,6 +91,8 @@ router.get('/genres', genre_controller.genre_list);
 
 /// Vocab ROUTES ///
 
+router.get('/vocabulary', vocabulary_controller.vocabulary_list);
+
 
 router.get('/vocabulary/create', vocabulary_controller.vocabulary_create_get);
 

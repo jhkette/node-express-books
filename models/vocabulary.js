@@ -6,6 +6,8 @@ var VocabularySchema= new Schema(
     {
          name: 
            {type: String, required: true, min: 3, max: 100},
+         definition:  
+           {type: String, required: true, min: 3, max: 100},
          
     }
 )

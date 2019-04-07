@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+  
+  ul
+    each vocabulary in vocabulary_list
+      li 
+        a(href=vocabulary.url) #{vocabulary.name} 
+        
+
+    else
+      li There is no vocabulary notes .

@@ -5,16 +5,16 @@ const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
 // Display list of all Genre.
-// exports.genre_list = function (req, res) {
-//     Genre.find()
-//         .then((list_genre) => {
-//             res.render('genre_list', {
-//                 title: 'Genre list',
-//                 genre_list: list_genre
-//             })
-//         })
-//         .catch(err => console.log(err));
-// };
+exports.vocabulary_list = function (req, res) {
+    Vocabulary.find()
+        .then((list_vocabulary) => {
+            res.render('vocabulary_list', {
+                title: 'Vocabulary list',
+                vocabulary_list: list_vocabulary
+            })
+        })
+        .catch(err => console.log(err));
+};
 
 
 // Display detail page for a specific Genre.
@@ -58,9 +58,10 @@ exports.vocabulary_create_post =  [
     
     // Validate that the name field is not empty.
     body('name', 'Genre name required').isLength({ min: 1 }).trim(),
+    body('definition', 'Definition required').isLength({ min: 3 }).trim(),
     
     // Sanitize (escape) the name field.
-    sanitizeBody('name').escape(),
+    sanitizeBody('*').escape(),
   
     // Process request after validation and sanitization.
     (req, res, next) => {
@@ -76,7 +77,8 @@ exports.vocabulary_create_post =  [
       else {
           // Create a genre object with escaped and trimmed data.
         var vocabulary = new Vocabulary(
-            { name: req.body.name }
+            { name: req.body.name,
+            definition: req.body.definition }
           ); 
         // Data from form is valid.
         // Check if Genre with same name already exists.
