@@ -98,4 +98,8 @@ router.get('/vocabulary/create', vocabulary_controller.vocabulary_create_get);
 router.post('/vocabulary/create', vocabulary_controller.vocabulary_create_post);
 
 
+// GET request for one Genre.
+router.get('/vocabulary/:id', vocabulary_controller.vocabulary_detail);
+
+
 module.exports = router;

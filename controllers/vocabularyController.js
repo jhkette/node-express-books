@@ -21,31 +21,25 @@ const { sanitizeBody } = require('express-validator/filter');
 exports.vocabulary_detail = function (req, res, next) {
 
     async.parallel({
-        genre: (callback) => {
-            Genre.findById(req.params.id)
+        vocabulary: (callback) => {
+            Vocabulary.findById(req.params.id)
                 .exec(callback);
         },
 
-        genre_books: function (callback) {
-            Book.find({
-                    'genre': req.params.id
-                })
-                .exec(callback);
-        },
     }, (err, results) => {
         if (err) {
             return next(err);
         }
-        if (results.genre == null) { // No results.
+        if (results.vocabulary == null) { // No results.
             var err = new Error('Genre not found');
             err.status = 404;
             return next(err);
         }
         // Successful, so render
-        res.render('genre_detail', {
-            title: 'Genre Detail',
-            genre: results.genre,
-            genre_books: results.genre_books
+        res.render('vocabulary_detail', {
+            title: 'vocab Detail',
+            vocabulary: results.vocabulary,
+           
         });
     });
 };
@@ -96,7 +90,7 @@ exports.vocabulary_create_post =  [
              else {    
                vocabulary.save()
                .then((vocabulary) => {
-                console.log(vocabulary);
+                res.redirect(vocabulary.url);
                
                })
              }
