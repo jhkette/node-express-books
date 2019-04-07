@@ -5,6 +5,7 @@ var router = express.Router();
 var book_controller = require('../controllers/bookController');
 var author_controller = require('../controllers/authorController');
 var genre_controller = require('../controllers/genreController');
+var vocabulary_controller = require('../controllers/vocabularyController');
 
 
 /// BOOK ROUTES ///
@@ -88,7 +89,13 @@ router.get('/genre/:id', genre_controller.genre_detail);
 // GET request for list of all Genre.
 router.get('/genres', genre_controller.genre_list);
 
-/// BOOKINSTANCE ROUTES ///
+/// Vocab ROUTES ///
+
+
+router.get('/vocabulary/create', vocabulary_controller.vocabulary_create_get);
+
+//POST request for creating Genre.
+router.post('/vocabulary/create', vocabulary_controller.vocabulary_create_post);
 
 
 module.exports = router;
