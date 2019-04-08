@@ -40,8 +40,8 @@ block content
       label Vocabulary:
       div
         select(multiple)
-          for genre in genres
-            option(value=genre.name) #{genre.name}
+          for vocabulary in vocabularylist
+            option(value=vocabulary.name) #{vocabulary.name}
                     
     button.btn.btn-primary(type='submit') Submit
 

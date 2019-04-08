@@ -1,6 +1,7 @@
 var Book = require('../models/book');
 var Author = require('../models/author');
 var Genre = require('../models/genre');
+var Vocabulary = require('../models/vocabulary');
 var async = require('async');
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -75,9 +76,12 @@ exports.book_create_get = function(req, res, next) {
         genres: function(callback) {
             Genre.find(callback);
         },
+        vocabularylist: function(callback) {
+            Vocabulary.find(callback);
+        },
     }, function(err, results) {
         if (err) { return next(err); }
-        res.render('book_form', { title: 'Create Book', authors: results.authors, genres: results.genres });
+        res.render('book_form', { title: 'Create Book', authors: results.authors, genres: results.genres, vocabularylist: results.vocabularylist });
     });
     
 };
@@ -169,7 +173,7 @@ exports.book_update_get = function(req, res, next) {
     // Get book, authors and genres for form.
     async.parallel({
         book: function(callback) {
-            Book.findById(req.params.id).populate('author').populate('genre').exec(callback);
+            Book.findById(req.params.id).populate('author').populate('genre').populate('vocabulary').exec(callback);
         },
         authors: function(callback) {
             Author.find(callback);
@@ -177,13 +181,18 @@ exports.book_update_get = function(req, res, next) {
         genres: function(callback) {
             Genre.find(callback);
         },
+        vocabularylist: function(callback) {
+            Vocabulary.find(callback);
+        },
         }, (err, results) => {
             if (err) { return next(err); }
             if (results.book==null) { // No results.
                 var err = new Error('Book not found');
                 err.status = 404;
                 return next(err);
+
             }
+            
             // Success.
             // Mark our selected genres as checked.
             for (var all_g_iter = 0; all_g_iter < results.genres.length; all_g_iter++) {
@@ -193,7 +202,8 @@ exports.book_update_get = function(req, res, next) {
                     }
                 }
             }
-            res.render('book_form', { title: 'Update Book', authors:results.authors, genres:results.genres, book: results.book });
+           
+            res.render('book_form', { title: 'Update Book', authors:results.authors, genres:results.genres,vocabularylist: results.vocabularylist, book: results.book });
         });
 
 };
@@ -251,6 +261,10 @@ exports.book_update_post = [
                 genres: function(callback) {
                     Genre.find(callback);
                 },
+
+                vocabularylist: function(callback) {
+                    Vocabulary.find(callback);
+                },
             }, function(err, results) {
                 if (err) { return next(err); }
 
@@ -260,7 +274,7 @@ exports.book_update_post = [
                         results.genres[i].checked='true';
                     }
                 }
-                res.render('book_form', { title: 'Update Book',authors:results.authors, genres:results.genres, book: book, errors: errors.array() });
+                res.render('book_form', { title: 'Update Book',authors:results.authors, genres:results.genres, book: book, vocabularylist: results.vocabulary, errors: errors.array() });
             });
             return;
         }
