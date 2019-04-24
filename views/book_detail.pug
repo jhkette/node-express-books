@@ -16,10 +16,8 @@ block content
   p #[strong vocab:] 
     each val in book.vocabulary
       a(href=val.url) #{val.name}
-      |, 
- 
-
-
+      
+      |:  #{val.definition}, 
 
   hr
   p
