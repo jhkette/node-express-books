@@ -8,8 +8,8 @@ block content
       label(for='name') Vocab:
       input#name.form-control(type='text', placeholder='lugubirious, apocryphal etc' name='name' value=(undefined===vocabulary ? '' : vocabulary.name))
     div.form-group
-      label(for='definition') Genre:
-      input#name.form-control(type='text', placeholder='Fantasy, Poetry etc.' name='definition' value=(undefined===genre ? '' : genre.definition))  
+      label(for='definition') Definition:
+      input#name.form-control(type='text', placeholder='Fantasy, Poetry etc.' name='definition' value=(undefined===vocabulary ? '' : vocabulary.definition))  
     button.btn.btn-primary(type='submit') Submit
   
 

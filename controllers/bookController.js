@@ -28,7 +28,7 @@ exports.index = (req, res) => {
     });
 };
 // Display list of all books.
-exports.book_list = function (req, res, next) {
+exports.book_list =  (req, res, next) => {
 
     Book.find({}, 'title author')
         .populate('author')
@@ -42,14 +42,15 @@ exports.book_list = function (req, res, next) {
 };
 
 // Display detail page for a specific book.
-exports.book_detail = function(req, res, next) {
+exports.book_detail = (req, res, next) => {
 
     async.parallel({
-        book: function(callback) {
+        book: (callback) => {
 
             Book.findById(req.params.id)
               .populate('author')
               .populate('genre')
+              .populate('vocabulary')
               .exec(callback);
         },
     
@@ -66,17 +67,17 @@ exports.book_detail = function(req, res, next) {
 
 };
 // Display book create form on GET.
-exports.book_create_get = function(req, res, next) { 
+exports.book_create_get = (req, res, next) => { 
       
     // Get all authors and genres, which we can use for adding to our book.
     async.parallel({
-        authors: function(callback) {
+        authors: (callback) => {
             Author.find(callback);
         },
-        genres: function(callback) {
+        genres: (callback) => {
             Genre.find(callback);
         },
-        vocabularylist: function(callback) {
+        vocabularylist: (callback) => {
             Vocabulary.find(callback);
         },
     }, function(err, results) {
@@ -120,7 +121,8 @@ exports.book_create_post = [
             author: req.body.author,
             summary: req.body.summary,
             review: req.body.review,
-            genre: req.body.genre
+            genre: req.body.genre,
+            vocabulary: req.body.vocabulary
            });
 
         if (!errors.isEmpty()) {
@@ -134,6 +136,9 @@ exports.book_create_post = [
                 genres: (callback) => {
                     Genre.find(callback);
                 },
+                vocabularylist: (callback) => {
+                    Vocabulary.find(callback);
+                },
             }, (err, results) => {
                 if (err) { return next(err); }
                 // Mark our selected genres as checked.
@@ -142,7 +147,12 @@ exports.book_create_post = [
                         results.genres[i].checked='true';
                     }
                 }
-                res.render('book_form', { title: 'Create Book',authors:results.authors, genres:results.genres, book: book, errors: errors.array() });
+                for (let i = 0; i < results.vocabularylist.length; i++) {
+                    if (book.vocabulary.indexOf(results.vocabularylist[i]._id) > -1) {
+                        results.vocabulary[i].checked='true';
+                    }
+                }
+                res.render('book_form', { title: 'Create Book',authors:results.authors, genres:results.genres,   vocabularylist:results.vocabularylist, book: book, errors: errors.array() });
             });
             return;
         }
@@ -202,6 +212,13 @@ exports.book_update_get = function(req, res, next) {
                     }
                 }
             }
+            for (var all_v_iter = 0; all_v_iter < results.vocabularylist.length; all_v_iter++) {
+                for (var book_v_iter = 0; book_v_iter < results.book.vocabulary.length; book_v_iter++) {
+                    if (results.vocabularylist[all_v_iter]._id.toString()==results.book.vocabulary[book_v_iter]._id.toString()) {
+                        results.vocabularylist[all_v_iter].checked='true';
+                    }
+                }
+            }
            
             res.render('book_form', { title: 'Update Book', authors:results.authors, genres:results.genres,vocabularylist: results.vocabularylist, book: results.book });
         });
@@ -247,6 +264,8 @@ exports.book_update_post = [
             summary: req.body.summary,
             review: req.body.review,
             genre: (typeof req.body.genre==='undefined') ? [] : req.body.genre,
+            _id:req.params.id, //This is required, or a new ID will be assigned!
+            vocabulary: (typeof req.body.vocabulary==='undefined') ? [] : req.body.vocabulary,
             _id:req.params.id //This is required, or a new ID will be assigned!
            });
 
@@ -270,11 +289,18 @@ exports.book_update_post = [
 
                 // Mark our selected genres as checked.
                 for (let i = 0; i < results.genres.length; i++) {
+                    // if index is found (ie greater than -1)
                     if (book.genre.indexOf(results.genres[i]._id) > -1) {
                         results.genres[i].checked='true';
                     }
                 }
-                res.render('book_form', { title: 'Update Book',authors:results.authors, genres:results.genres, book: book, vocabularylist: results.vocabulary, errors: errors.array() });
+
+                for (let i = 0; i < results.vocabularylist.length; i++) {
+                    if (book.vocabulary.indexOf(results.vocabularylist[i]._id) > -1) {
+                        results.vocabulary[i].checked='true';
+                    }
+                }
+                res.render('book_form', { title: 'Update Book',authors:results.authors, genres:results.genres, book: book, vocabularylist: results.vocabularylist, errors: errors.array() });
             });
             return;
         }

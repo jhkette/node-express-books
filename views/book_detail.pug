@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1 #{title}: #{book.title}
-  
+
   p #[strong Author:] 
     a(href=book.author.url) #{book.author.name}
   p #[strong Summary:] #{book.summary}
@@ -11,9 +11,15 @@ block content
     each val in book.genre
       a(href=val.url) #{val.name}
       |, 
-  
-  
-      
+
+ 
+  p #[strong vocab:] 
+    each val in book.vocabulary
+      a(href=val.url) #{val.name}
+ 
+
+
+
   hr
   p
     a(href=book.url+'/delete') Delete Book

@@ -39,9 +39,10 @@ block content
     div.form-group
       label Vocabulary:
       div
-        select(multiple)
-          for vocabulary in vocabularylist
-            option(value=vocabulary.name) #{vocabulary.name}
+        for vocabulary in vocabularylist
+          div(style='display: inline; padding-right:10px;')
+            input.checkbox-input(type='checkbox', name='vocabulary', id=vocabulary._id, value=vocabulary._id, checked=vocabulary.checked )
+            label(for=vocabulary._id) #{vocabulary.name}
                     
     button.btn.btn-primary(type='submit') Submit
 
