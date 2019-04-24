@@ -104,4 +104,17 @@ router.post('/vocabulary/create', vocabulary_controller.vocabulary_create_post);
 router.get('/vocabulary/:id', vocabulary_controller.vocabulary_detail);
 
 
+// GET request to delete Genre.
+router.get('/vocabulary/:id/delete', vocabulary_controller.vocabulary_delete_get);
+
+// POST request to delete Genre.
+router.post('/vocabulary/:id/delete', vocabulary_controller.vocabulary_delete_post);
+
+// GET request to update Genre.
+router.get('/vocabulary/:id/update', vocabulary_controller.vocabulary_update_get);
+
+// POST request to update Genre.
+router.post('/vocabulary/:id/update', vocabulary_controller.vocabulary_update_post);
+
+
 module.exports = router;
