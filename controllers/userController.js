@@ -11,9 +11,6 @@ exports.user_register_get = function(req, res){
   };
   
 
-
-
-
 exports.user_login = function(req, res){
     res.render('login');
   };
