@@ -5,6 +5,8 @@ var Vocabulary = require('../models/vocabulary');
 var async = require('async');
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
+const {ensureAuthenticated} = require('../config/auth')
+
 
 exports.index = (req, res) => {
 
@@ -67,8 +69,8 @@ exports.book_detail = (req, res, next) => {
 
 };
 // Display book create form on GET.
-exports.book_create_get = (req, res, next) => { 
-      
+exports.book_create_get =  (req, res, next) => { 
+    ensureAuthenticated;
     // Get all authors and genres, which we can use for adding to our book.
     async.parallel({
         authors: (callback) => {

@@ -1,7 +1,12 @@
-const LocalStrategy = require('passport-local').Strategy;
+const express = require('express');
+const mongoose = require('mongoose');
+
+  const LocalStrategy = require('passport-local').Strategy;
+  const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 
-const bcrypt = require('bcryptjs');
+
+
 
 module.exports = function(passport){
   // Local Strategy
@@ -18,8 +23,10 @@ module.exports = function(passport){
       bcrypt.compare(password, user.password, function(err, isMatch){
         if(err) throw err;
         if(isMatch){
+          console.log(password, user.password +'it works ish')
           return done(null, user);
         } else {
+          console.log(password, user.password)
           return done(null, false, {message: 'Wrong password'});
         }
       });
