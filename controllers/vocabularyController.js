@@ -181,13 +181,16 @@ exports.vocabulary_delete_post =  (req, res, next) => {
             return;
         } else {
             // Genre has no books. Delete object and redirect to the list of genres.
-            Vocabulary.findByIdAndRemove(req.body.id, function deleteGenre(err) {
-                if (err) {
-                    return next(err);
-                }
-                // Success - go to genres list.
+            Vocabulary.findByIdAndRemove(req.body.id)
+              .then(id => {
                 res.redirect('/catalog/vocabulary');
-            });
+              })
+              .catch(err => {
+                  console.log(err)
+              } 
+                // Success - go to genres list.
+                
+            );
 
         }
     });
@@ -197,10 +200,8 @@ exports.vocabulary_delete_post =  (req, res, next) => {
 // Display Genre update form on GET.
 exports.vocabulary_update_get = (req, res, next) => {
 
-    Vocabulary.findById(req.params.id, (err, vocabulary) => {
-        if (err) {
-            return next(err);
-        }
+    Vocabulary.findById(req.params.id)
+    .then(vocabulary => {
         if (vocabulary == null) { // No results.
             var err = new Error('vocabulary not found');
             err.status = 404;
@@ -211,7 +212,8 @@ exports.vocabulary_update_get = (req, res, next) => {
             title: 'Update Vocabulary',
             vocabulary: vocabulary
         });
-    });
+    })
+    .catch(err => console.log(err));
 
 };
 
