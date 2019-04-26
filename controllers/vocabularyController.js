@@ -55,11 +55,7 @@ exports.vocabulary_create_get = function (req, res, next) {
     res.render('vocabulary_form', {
         title: 'Create Vocab'
     });
-    res.render('vocabulary_form', {
-        title: 'Create Vocabulary',
-        vocabulary: vocabulary,
-        errors: errors.array()
-    });
+  
 };
 
 // Handle Genre create on POST.

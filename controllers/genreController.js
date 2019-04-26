@@ -61,11 +61,7 @@ exports.genre_create_get = function (req, res, next) {
     res.render('genre_form', {
         title: 'Create Genre'
     });
-    res.render('genre_form', {
-        title: 'Create Genre',
-        genre: genre,
-        errors: errors.array()
-    });
+
 };
 
 // Handle Genre create on POST.
