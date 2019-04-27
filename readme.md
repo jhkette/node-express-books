@@ -1,6 +1,7 @@
-## Note taking app for books
+# Book Note taking app 
 
-##thing to fix
+
+## Thing to fix ##
 
 1) attach user model to book model. User should have relationship to books
 
@@ -9,10 +10,12 @@ desired but error message needed?
 
 3) check through code/tidy code.
 
+4) add read /unread field to book model
 
 
 
-Big things
+
+## Big things ##
 
 1) add css/ remove bootstrap
 
