@@ -4,9 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var helmet = require('helmet');
-const expressValidator = require('express-validator');
 const multer = require('multer');
-
 const passport = require('passport');
 const flash = require('connect-flash');
 var session = require("express-session");
@@ -43,7 +41,8 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
-// multer
+// multer middleware
+// organise filestorage - give unique name to file
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'images');
@@ -53,6 +52,7 @@ const fileStorage = multer.diskStorage({
   }
 });
 
+// filter images by filetype
 const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === 'image/png' ||
@@ -66,26 +66,26 @@ const fileFilter = (req, file, cb) => {
 };
 
 
-
-
 // initialise passport middleware
 require('./config/passport')(passport);
-
 app.use(session({
   secret: 'keyboard cat',
   resave: true,
   saveUninitialized: true,
 
 }))
+// initialise passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 // body parser 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
 );
 app.use('/images', express.static(path.join(__dirname, 'images')));
-// initialise passport
-app.use(passport.initialize());
-app.use(passport.session());
+
+
 // initialise flash
 app.use(flash());
 
@@ -113,9 +113,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/catalog', catalogRouter);
 
-// app.use(
-//   multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
-// );
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

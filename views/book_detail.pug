@@ -17,10 +17,14 @@ block content
     each val in book.vocabulary
       a(href=val.url) #{val.name}
       
-      |:  #{val.definition}, 
+      |:  #{val.definition},
+  if book.imageUrl 
+       
+    img(src='/images/'+ book.imageUrl)     
 
   hr
-  p
-    a(href=book.url+'/delete') Delete Book
-  p
-    a(href=book.url+'/update') Update Book
+  if user
+    p
+      a(href=book.url+'/delete') Delete Book
+    p
+      a(href=book.url+'/update') Update Book
