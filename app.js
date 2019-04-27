@@ -97,7 +97,7 @@ app.use(function(req, res, next) {
 });
 
 // local variables - this needs to be after passport
-// as it uses passport 'user' variable
+// as it uses passport 'user' variable - this can now be accessed in controllers etc
 app.get('*', function(req, res, next){
   if (req.user) {
     res.locals.user = req.user;
