@@ -5,7 +5,7 @@
 
 1) attach user model to book model. User should have relationship to books
 
-2)Error message if non gif,png,jpg uploaded? currently pdf etc not uploaded as 
+2) Error message if non gif,png,jpg uploaded? currently pdf etc not uploaded as 
 desired but error message needed?
 
 3) check through code/tidy code.
