@@ -34,40 +34,6 @@ app.use(cookieParser());
 // static  directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// multer
-const storage = multer.diskStorage({
-  destination: './images',
-  filename: function(req, file,cb){
-      cb(null, file.fieldname+'-'+ Date.now()
-      +path.extname(file.originalname));
-  }
-});
-
-const upload = multer({
-  storage: storage, 
-  limits :{fileSize: 10000000},
-  fileFilter: function(req, file, cb){
-      checkFileType(file, cb);
-  }
-}).single('books');
-
-function checkFileType(file, cb){
-  // Allowed ext
-  const filetypes = /jpeg|jpg|png|gif/;
-  // Check ext
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // Check mime
-  const mimetype = filetypes.test(file.mimetype);
-
-  if(mimetype && extname){
-    return cb(null, true);
-  } else {
-    cb('Error: Images Only!');
-  }
-}
-
-
-
 // connect to db
 var mongoose = require('mongoose');
 var dev_db_url = 'mongodb+srv://jkette01:Gue55wh0s1n@cluster0-w0njc.mongodb.net/test?retryWrites=true';
@@ -75,6 +41,31 @@ var mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+
+// multer
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + '-' + file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+
 
 
 // initialise passport middleware
@@ -88,6 +79,10 @@ app.use(session({
 }))
 // body parser 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
+);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 // initialise passport
 app.use(passport.initialize());
 app.use(passport.session());

@@ -5,9 +5,6 @@ var Vocabulary = require('../models/vocabulary');
 var async = require('async');
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
-var multer = require('multer')
-// var upload = multer({ dest: './images' })
-const {storage, upload, checkFileType } = require ('../config/multer.js');
 
 
 
@@ -125,11 +122,13 @@ exports.book_create_post = [
     sanitizeBody('*').escape(),
 
     // Process request after validation and sanitization.
-    upload.single('image'), (req, res, next) => {
+    (req, res, next) => {
+        const errors = validationResult(req);
+       
         
         // Extract the validation errors from a request.
-        const errors = validationResult(req);
-
+        const image = req.file;
+        const imageUrl = image.path;
         // Create a Book object with escaped and trimmed data.
         var book = new Book(
           { title: req.body.title,
@@ -138,7 +137,7 @@ exports.book_create_post = [
             review: req.body.review,
             genre: req.body.genre,
             vocabulary: req.body.vocabulary,
-            imageUrl: `images/${req.file.filename}`
+            imageUrl: `images/${image}`
            });
 
         if (!errors.isEmpty()) {
@@ -180,7 +179,9 @@ exports.book_create_post = [
                    res.redirect(book.url);
                 });
         }
+   
     }
+
 ];
 
 // Display book delete form on GET.
