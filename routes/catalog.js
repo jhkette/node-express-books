@@ -42,7 +42,7 @@ router.get('/books', book_controller.book_list);
 /// AUTHOR ROUTES ///
 
 // GET request for creating Author. NOTE This must come before route for id (i.e. display author).
-router.get('/author/create', author_controller.author_create_get);
+router.get('/author/create',  ensureAuthenticated, author_controller.author_create_get);
 
 // POST request for creating Author.
 router.post('/author/create', author_controller.author_create_post);
@@ -68,7 +68,7 @@ router.get('/authors', author_controller.author_list);
 /// GENRE ROUTES ///
 
 // GET request for creating a Genre. NOTE This must come before route that displays Genre (uses id).
-router.get('/genre/create', genre_controller.genre_create_get);
+router.get('/genre/create',   ensureAuthenticated, genre_controller.genre_create_get);
 
 //POST request for creating Genre.
 router.post('/genre/create', genre_controller.genre_create_post);
@@ -96,7 +96,7 @@ router.get('/genres', genre_controller.genre_list);
 router.get('/vocabulary', vocabulary_controller.vocabulary_list);
 
 
-router.get('/vocabulary/create', vocabulary_controller.vocabulary_create_get);
+router.get('/vocabulary/create',  ensureAuthenticated, vocabulary_controller.vocabulary_create_get);
 
 //POST request for creating Genre.
 router.post('/vocabulary/create', vocabulary_controller.vocabulary_create_post);

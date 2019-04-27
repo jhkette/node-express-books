@@ -18,7 +18,6 @@ exports.user_login = function(req, res){
 
 exports.user_register_post = [
  
-  
     body('name', 'Name is required').isLength({ min: 1 }).trim(),
     body('email', 'Email is required').isLength({ min: 1 }).trim(),
     body('email', 'Email is not valid').isEmail(),
@@ -68,12 +67,20 @@ exports.user_register_post = [
 ]
 
 
-exports.user_login_post = function(req, res, next){
+exports.user_login_post = (req, res, next) =>{
   passport.authenticate('local', {
     successRedirect:'/catalog',
+   
     failureRedirect:'/catalog/vocabulary',
     // failureFlash: true,
    
     // failureFlash: true
   })(req, res, next);
+ 
+};
+
+exports.user_logout_post = (req, res) => {
+  req.logout();
+  // req.flash('success_msg', 'You are logged out');
+  res.redirect('/users/login');
 };

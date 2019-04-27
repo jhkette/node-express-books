@@ -7,9 +7,6 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.get('/cool', function(req, res, next) {
-  res.send('you are so cool');
-});
 
 
 router.get('/register',  user_controller.user_register_get)
@@ -17,9 +14,11 @@ router.get('/register',  user_controller.user_register_get)
 router.post('/register', user_controller.user_register_post)
 
 
-
 router.get('/login',  user_controller.user_login)
 
 router.post('/login',  user_controller.user_login_post)
+
+
+router.get('/logout',user_controller. user_logout_post)
 
 module.exports = router;

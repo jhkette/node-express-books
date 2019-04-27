@@ -210,7 +210,6 @@ exports.vocabulary_update_get = (req, res, next) => {
         });
     })
     .catch(err => console.log(err));
-
 };
 
 // Handle Genre update on POST.

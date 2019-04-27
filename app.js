@@ -5,14 +5,15 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var helmet = require('helmet');
 const expressValidator = require('express-validator');
+const multer = require('multer');
 
 const passport = require('passport');
 const flash = require('connect-flash');
 var session = require("express-session");
 var bodyParser = require("body-parser");
-//pasport config
 
 
+// routes
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var catalogRouter = require('./routes/catalog');
@@ -33,6 +34,39 @@ app.use(cookieParser());
 // static  directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+// multer
+const storage = multer.diskStorage({
+  destination: './images',
+  filename: function(req, file,cb){
+      cb(null, file.fieldname+'-'+ Date.now()
+      +path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage, 
+  limits :{fileSize: 10000000},
+  fileFilter: function(req, file, cb){
+      checkFileType(file, cb);
+  }
+}).single('books');
+
+function checkFileType(file, cb){
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+
+  if(mimetype && extname){
+    return cb(null, true);
+  } else {
+    cb('Error: Images Only!');
+  }
+}
+
+
 
 // connect to db
 var mongoose = require('mongoose');
@@ -52,10 +86,12 @@ app.use(session({
   saveUninitialized: true,
 
 }))
-
+// body parser 
 app.use(bodyParser.urlencoded({ extended: false }));
+// initialise passport
 app.use(passport.initialize());
 app.use(passport.session());
+// initialise flash
 app.use(flash());
 
 app.use(function(req, res, next) {
@@ -65,13 +101,26 @@ app.use(function(req, res, next) {
   next();
 });
 
+// local variables - this needs to be after passport
+// as it uses passport 'user' variable
+app.get('*', function(req, res, next){
+  if (req.user) {
+    res.locals.user = req.user;
+}
+  next();
+
+});
+
+
 
 // Now initialise routes after passport is initalises
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/catalog', catalogRouter);
 
-
+// app.use(
+//   multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
+// );
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -93,15 +142,8 @@ app.use(function(err, req, res, next) {
 
 
 // Express Messages Middleware
-
 app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
-  next();
-});
-
-
-app.get('*', function(req, res, next){
-  res.locals.user = req.user || null;
   next();
 });
 

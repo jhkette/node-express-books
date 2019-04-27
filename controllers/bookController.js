@@ -5,6 +5,9 @@ var Vocabulary = require('../models/vocabulary');
 var async = require('async');
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
+var multer = require('multer')
+// var upload = multer({ dest: './images' })
+const {storage, upload, checkFileType } = require ('../config/multer.js');
 
 
 
@@ -89,6 +92,9 @@ exports.book_create_get =  (req, res, next) => {
     
 };
 
+// you need to use upload.single
+// https://github.com/expressjs/multer
+
 // Handle book create on POST.
 exports.book_create_post = [
     // Convert the genre to an array.
@@ -119,7 +125,7 @@ exports.book_create_post = [
     sanitizeBody('*').escape(),
 
     // Process request after validation and sanitization.
-    (req, res, next) => {
+    upload.single('image'), (req, res, next) => {
         
         // Extract the validation errors from a request.
         const errors = validationResult(req);
@@ -131,7 +137,8 @@ exports.book_create_post = [
             summary: req.body.summary,
             review: req.body.review,
             genre: req.body.genre,
-            vocabulary: req.body.vocabulary
+            vocabulary: req.body.vocabulary,
+            imageUrl: `images/${req.file.filename}`
            });
 
         if (!errors.isEmpty()) {
