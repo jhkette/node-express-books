@@ -12,15 +12,17 @@ desired but error message needed?
 
 - add read /unread field to book model
 
-- add conditionla for edit author,genre, based on req.user
+- add conditional for edit author,genre, based on req.user
+
+- get random record of books for index page  (aggregate.sample)  ie aggregate.sample(3);
 
 
 
 
 ## Big things ##
 
-1) add css/ remove bootstrap
+-  add css/ remove bootstrap
 
-2) add js/jquerry 
+-  add js/jquery 
 
 
