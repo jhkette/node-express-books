@@ -10,11 +10,11 @@ desired but error message needed?
 
 - check through code/tidy code.
 
-- add read /unread field to book model
+- add read /unread field to book model(done)
 
 - add conditional for edit author,genre, based on req.user
 
-- get random record of books for index page  (aggregate.sample)  ie aggregate.sample(3);
+- get random record of books for index page  (aggregate.sample)  ie aggregate.sample(3); (DONE)
 
 
 

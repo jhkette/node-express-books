@@ -25,6 +25,10 @@ var BookSchema = new Schema({
     type: String,
     required: true
   },
+  read: {
+    type: Boolean,
+    default: false
+  },
   genre: [{
     type: Schema.Types.ObjectId,
     ref: 'Genre'

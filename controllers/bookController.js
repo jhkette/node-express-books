@@ -184,6 +184,7 @@ exports.book_create_post = [
             author: req.body.author,
             summary: req.body.summary,
             review: req.body.review,
+            read: req.body.read,
             genre: req.body.genre,
             vocabulary: req.body.vocabulary,
             imageUrl: image
@@ -222,6 +223,7 @@ exports.book_create_post = [
                     title: 'Create Book',
                     authors: results.authors,
                     genres: results.genres,
+                    read: req.body.read,
                     vocabularylist: results.vocabularylist,
                     book: book,
                     errors: errors.array()
@@ -375,6 +377,7 @@ exports.book_update_post = [
             author: req.body.author,
             summary: req.body.summary,
             review: req.body.review,
+            read: req.body.read,
             genre: (typeof req.body.genre === 'undefined') ? [] : req.body.genre,
             _id: req.params.id, //This is required, or a new ID will be assigned!
             vocabulary: (typeof req.body.vocabulary === 'undefined') ? [] : req.body.vocabulary,
@@ -415,6 +418,7 @@ exports.book_update_post = [
                     title: 'Create Book',
                     authors: results.authors,
                     genres: results.genres,
+                    read: req.body.read,
                     vocabularylist: results.vocabularylist,
                     book: book,
                     errors: errors.array()

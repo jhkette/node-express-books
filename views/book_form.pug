@@ -31,6 +31,12 @@ block content
     div.form-group  
       label(for='image') Image
       input#image.form-control(type='file', name='image') 
+    div.form-group
+      label(for='read')
+      div
+        select#read(name="read")
+          option(value='false') unfinished
+          option(value='true') finished  
                    
     
     div.form-group
@@ -47,6 +53,7 @@ block content
           div(style='display: inline; padding-right:10px;')
             input.checkbox-input(type='checkbox', name='vocabulary', id=vocabulary._id, value=vocabulary._id, checked=vocabulary.checked )
             label(for=vocabulary._id) #{vocabulary.name}
+
                     
     button.btn.btn-primary(type='submit') Submit
 
