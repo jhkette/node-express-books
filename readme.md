@@ -1,5 +1,6 @@
 # Book Note taking app 
 
+A personal project to take notes from books i've read. Including recording if they are finished or not,organising by genre, adding vocabulary if new is found.  Made using node/express. 
 
 ## Thing to fix ##
 
