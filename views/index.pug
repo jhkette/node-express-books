@@ -16,3 +16,9 @@ block content
       
       li #[strong Authors:] !{data.author_count}
       li #[strong Genres:] !{data.genre_count}
+
+    ul
+      each book in data.book_random
+        li 
+          a(href='catalog/book/' + book._id) #{book.title} 
+          |  #{book.author.name}  

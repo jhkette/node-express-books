@@ -13,7 +13,9 @@ const {
 
 
 
+
 exports.index = (req, res) => {
+
 
     async.parallel({
         book_count: (callback) => {
@@ -24,12 +26,20 @@ exports.index = (req, res) => {
         },
         genre_count: (callback) => {
             Genre.countDocuments({}, callback);
+        },
+        book_random: (callback) => {
+            Book.aggregate(
+                [ { $sample: { size: 6 } } ],  callback
+             )                   
         }
-    }, (err, results) => {
+    },    
+    (err, results) => {
+        console.log(results.book_random)
         res.render('index', {
             title: 'Local Library Home',
             error: err,
-            data: results
+            data: results,
+          
         });
     });
 };
@@ -38,6 +48,7 @@ exports.book_list = (req, res, next) => {
 
     Book.find({}, 'title author')
         .populate('author')
+      
         .then((list_books) => {
             res.render('book_list', {
                 title: 'Book List',
