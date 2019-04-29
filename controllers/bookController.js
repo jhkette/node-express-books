@@ -333,6 +333,7 @@ exports.book_update_post = [
     sanitizeBody('review').escape(),
     sanitizeBody('genre.*').escape(),
     sanitizeBody('vocabulary.*').escape(),
+    sanitizeBody('image').escape(),
 
     // Process request after validation and sanitization.
     (req, res, next) => {

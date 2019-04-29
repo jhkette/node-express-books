@@ -31,7 +31,8 @@ exports.user_register_post = [
     if (!errors.isEmpty()) {
         // There are errors. Render form again with sanitized values/errors messages.
         res.render('register', {
-            title: 'Create Author',
+            title: 'Create user account',
+            errors: errors.array()
         });
         return;
     
