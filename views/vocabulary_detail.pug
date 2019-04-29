@@ -6,8 +6,9 @@ block content
   p Definition: #{vocabulary.definition}
   
   div(style='margin-left:20px;margin-top:20px')
+  if user
 
-  p
-    a(href=vocabulary.url+'/delete') Delete Vocab
-  p
-    a(href=vocabulary.url+'/update') Update Vocab   
+    p
+      a(href=vocabulary.url+'/delete') Delete Vocab
+    p
+      a(href=vocabulary.url+'/update') Update Vocab   

@@ -163,18 +163,14 @@ exports.book_create_post = [
     // Process request after validation and sanitization.
     (req, res, next) => {
         const errors = validationResult(req);
-        // Extract the validation errors from a request.
-        let image = '';
-        if (req.file !== undefined) {
-            image = req.file.filename;
-            if (!image) {
-                res.render('book_form', {
-                    title: 'Create Book'
 
-                })
-                return
-            }
+
+        // Extract the validation errors from a request.
+        let image  = ' ';
+        if(req.file !== undefined){
+            image = ref.file.filename;
         }
+    
         if (!errors.isEmpty()) {
             // There are errors. Render form again with sanitized values/error messages.
 
@@ -213,10 +209,11 @@ exports.book_create_post = [
                     book: book,
                     errors: errors.array()
                 });
+
             });
             return;
         } else {
-             // Create a Book object with escaped and trimmed data.
+            // Create a Book object with escaped and trimmed data.
             var book = new Book({
                 title: req.body.title,
                 author: req.body.author,
@@ -227,7 +224,6 @@ exports.book_create_post = [
                 vocabulary: req.body.vocabulary,
                 imageUrl: image
             });
-    
             // Data from form is valid. Save book.
             book.save((err) => {
                 if (err) {
@@ -241,6 +237,7 @@ exports.book_create_post = [
     }
 
 ];
+
 // Display book update form on GET.
 exports.book_update_get = (req, res, next) => {
 
