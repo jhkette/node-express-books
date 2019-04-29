@@ -17,6 +17,7 @@ desired but error message needed?
 
 - get random record of books for index page  (aggregate.sample)  ie aggregate.sample(3); (DONE)
 
+- use book findById as opposed to findandupdate it will make it make it easier to save only relevant form fields. Important as image should not be updated in this case (see below)(DONE)
 
 
 
@@ -25,5 +26,4 @@ desired but error message needed?
 -  add css/ remove bootstrap
 
 -  add js/jquery 
-
 

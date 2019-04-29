@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #[em LocalLibrary], a very basic Express website developed as a tutorial example on the Mozilla Developer Network.
+  p Welcome to #[em Booknotes], 
 
   h1 Dynamic content
 
@@ -23,7 +23,8 @@ block content
           a(href='catalog/book/' + book._id) #{book.title} 
           |  #{book.author.name}  
           if book.imageUrl
-          img(src='/images/'+ book.imageUrl) 
+          //- add when styling is done
+          //- img(src='/images/'+ book.imageUrl) 
 
 
 

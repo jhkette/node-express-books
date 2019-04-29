@@ -18,37 +18,41 @@ exports.index = (req, res) => {
 
 
     async.parallel({
-        book_count: (callback) => {
-            Book.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
+            book_count: (callback) => {
+                Book.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
+            },
+            author_count: (callback) => {
+                Author.countDocuments({}, callback);
+            },
+            genre_count: (callback) => {
+                Genre.countDocuments({}, callback);
+            },
+            book_random: (callback) => {
+                Book.aggregate(
+                    [{
+                        $sample: {
+                            size: 6
+                        }
+                    }], callback
+                )
+            }
         },
-        author_count: (callback) => {
-            Author.countDocuments({}, callback);
-        },
-        genre_count: (callback) => {
-            Genre.countDocuments({}, callback);
-        },
-        book_random: (callback) => {
-            Book.aggregate(
-                [ { $sample: { size: 6 } } ],  callback
-             )                   
-        }
-    },    
-    (err, results) => {
-        console.log(results.book_random)
-        res.render('index', {
-            title: 'Local Library Home',
-            error: err,
-            data: results,
-          
+        (err, results) => {
+            console.log(results.book_random)
+            res.render('index', {
+                title: 'Booknotes',
+                error: err,
+                data: results,
+
+            });
         });
-    });
 };
 // Display list of all books.
 exports.book_list = (req, res, next) => {
 
     Book.find({}, 'title author')
         .populate('author')
-      
+
         .then((list_books) => {
             res.render('book_list', {
                 title: 'Book List',
@@ -178,6 +182,7 @@ exports.book_create_post = [
         }
 
 
+
         // Create a Book object with escaped and trimmed data.
         var book = new Book({
             title: req.body.title,
@@ -244,16 +249,6 @@ exports.book_create_post = [
     }
 
 ];
-
-// Display book delete form on GET.
-exports.book_delete_get = function (req, res) {
-    res.send('NOT IMPLEMENTED: Book delete GET');
-};
-
-// Handle book delete on POST.
-exports.book_delete_post = function (req, res) {
-    res.send('NOT IMPLEMENTED: Book delete POST');
-};
 
 // Display book update form on GET.
 exports.book_update_get = (req, res, next) => {
@@ -354,38 +349,8 @@ exports.book_update_post = [
 
     // Process request after validation and sanitization.
     (req, res, next) => {
-
-        // handle undefined image and image errors
-        let image = '';
-        if (req.file !== undefined) {
-            image = req.file.filename;
-            if (!image) {
-                res.render('book_form', {
-                    title: 'Create Book'
-
-                })
-                return
-            }
-        }
-
         // Extract the validation errors from a request.
         const errors = validationResult(req);
-
-        // Create a Book object with escaped/trimmed data and old id.
-        var book = new Book({
-            title: req.body.title,
-            author: req.body.author,
-            summary: req.body.summary,
-            review: req.body.review,
-            read: req.body.read,
-            genre: (typeof req.body.genre === 'undefined') ? [] : req.body.genre,
-            _id: req.params.id, //This is required, or a new ID will be assigned!
-            vocabulary: (typeof req.body.vocabulary === 'undefined') ? [] : req.body.vocabulary,
-            _id: req.params.id, //This is required, or a new ID will be assigned!
-            imageUrl: image
-
-        });
-
         if (!errors.isEmpty()) {
             // There are errors. Render form again with sanitized values/error messages.
 
@@ -427,18 +392,41 @@ exports.book_update_post = [
             return;
 
         } else {
-            console.log(book);
+            let title = req.body.title;
+            let author = req.body.author;
+            let summary = req.body.summary;
+            let review = req.body.review;
+            let read = req.body.read;
+            let genre = (typeof req.body.genre === 'undefined') ? [] : req.body.genre;
+            let id = req.params.id; //This is required, or a new ID will be assigned!
+            let vocab = (typeof req.body.vocabulary === 'undefined') ? [] : req.body.vocabulary;
+
+            let image = req.file;
+
             // Data from form is valid. Update the record.
-            Book.findByIdAndUpdate(req.params.id, book, {}, (err, thebook) => {
-                if (err) {
-                    console.log(err)
-                }
-                // Successful - redirect to book detail page.
-                console.log(thebook);
-                res.redirect(thebook.url);
-            });
+            Book.findById(req.params.id)
+                .then(book => {
+                    book.title = title;
+                    book.author = author;
+                    book.summary = summary;
+                    book.review = review;
+                    book.read = read;
+                    book.genre = genre;
+                    book._id = id; //This is required, or a new ID will be assigned!
+                    book.vocabulary = vocab;
+                    if (image) {
+                        book.imageUrl = image.filename;
+                    }
+                    return book.save().then(result => {
+                        console.log('UPDATED book!');
+                        res.redirect('/');
+                    });
+                })
+                .catch(err => console.log(err));
+
         }
     }
+
 ];
 
 
