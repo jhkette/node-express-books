@@ -15,8 +15,6 @@ const {
 
 
 exports.index = (req, res) => {
-
-
     async.parallel({
             book_count: (callback) => {
                 Book.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
@@ -124,7 +122,6 @@ exports.book_create_get = (req, res, next) => {
 // you need to use upload.single
 // https://github.com/expressjs/multer
 
-// Handle book create on POST.
 exports.book_create_post = [
     // Convert the genre to an array.
     (req, res, next) => {
@@ -166,8 +163,6 @@ exports.book_create_post = [
     // Process request after validation and sanitization.
     (req, res, next) => {
         const errors = validationResult(req);
-
-
         // Extract the validation errors from a request.
         let image = '';
         if (req.file !== undefined) {
@@ -180,21 +175,6 @@ exports.book_create_post = [
                 return
             }
         }
-
-
-
-        // Create a Book object with escaped and trimmed data.
-        var book = new Book({
-            title: req.body.title,
-            author: req.body.author,
-            summary: req.body.summary,
-            review: req.body.review,
-            read: req.body.read,
-            genre: req.body.genre,
-            vocabulary: req.body.vocabulary,
-            imageUrl: image
-        });
-
         if (!errors.isEmpty()) {
             // There are errors. Render form again with sanitized values/error messages.
 
@@ -236,6 +216,18 @@ exports.book_create_post = [
             });
             return;
         } else {
+             // Create a Book object with escaped and trimmed data.
+            var book = new Book({
+                title: req.body.title,
+                author: req.body.author,
+                summary: req.body.summary,
+                review: req.body.review,
+                read: req.body.read,
+                genre: req.body.genre,
+                vocabulary: req.body.vocabulary,
+                imageUrl: image
+            });
+    
             // Data from form is valid. Save book.
             book.save((err) => {
                 if (err) {
@@ -249,7 +241,6 @@ exports.book_create_post = [
     }
 
 ];
-
 // Display book update form on GET.
 exports.book_update_get = (req, res, next) => {
 
@@ -275,7 +266,6 @@ exports.book_update_get = (req, res, next) => {
             var err = new Error('Book not found');
             err.status = 404;
             return next(err);
-
         }
 
         // Success.
@@ -303,8 +293,8 @@ exports.book_update_get = (req, res, next) => {
             book: results.book
         });
     });
-
 };
+
 // Handle book update on POST.
 exports.book_update_post = [
 
@@ -392,16 +382,15 @@ exports.book_update_post = [
             return;
 
         } else {
-            let title = req.body.title;
-            let author = req.body.author;
-            let summary = req.body.summary;
-            let review = req.body.review;
-            let read = req.body.read;
-            let genre = (typeof req.body.genre === 'undefined') ? [] : req.body.genre;
-            let id = req.params.id; //This is required, or a new ID will be assigned!
-            let vocab = (typeof req.body.vocabulary === 'undefined') ? [] : req.body.vocabulary;
-
-            let image = req.file;
+            const title = req.body.title;
+            const author = req.body.author;
+            const summary = req.body.summary;
+            const review = req.body.review;
+            const read = req.body.read;
+            const genre = (typeof req.body.genre === 'undefined') ? [] : req.body.genre;
+            const id = req.params.id; //This is required, or a new ID will be assigned!
+            const vocab = (typeof req.body.vocabulary === 'undefined') ? [] : req.body.vocabulary;
+            const image = req.file;
 
             // Data from form is valid. Update the record.
             Book.findById(req.params.id)
@@ -423,7 +412,6 @@ exports.book_update_post = [
                     });
                 })
                 .catch(err => console.log(err));
-
         }
     }
 
