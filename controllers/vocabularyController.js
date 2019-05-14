@@ -180,9 +180,7 @@ exports.vocabulary_delete_post =  (req, res, next) => {
               })
               .catch(err => {
                   console.log(err)
-              } 
-                // Success - go to genres list.
-                
+              }          
             );
 
         }

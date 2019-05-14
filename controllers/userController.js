@@ -21,6 +21,11 @@ exports.user_register_post = [
     body('name', 'Name is required').isLength({ min: 1 }).trim(),
     body('email', 'Email is required').isLength({ min: 1 }).trim(),
     body('email', 'Email is not valid').isEmail(),
+    body('email').custom(email => {
+      if (alreadyHaveEmail(email)) {
+        throw new Error('Email already registered')
+      }
+    }),
     body('username', 'Username is required').isLength({ min: 1 }).trim(),
     body('password', 'Password is required').isLength({ min: 1 }).trim(),
     body('password2').custom((value, { req }) => {
@@ -38,7 +43,6 @@ exports.user_register_post = [
             errors: errors.array()
         });
         return;
-    
     } else {
       let newUser = new User({
         name:req.body.name,
