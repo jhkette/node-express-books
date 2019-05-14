@@ -23,8 +23,11 @@ exports.user_register_post = [
     body('email', 'Email is not valid').isEmail(),
     body('username', 'Username is required').isLength({ min: 1 }).trim(),
     body('password', 'Password is required').isLength({ min: 1 }).trim(),
-    body('password2', 'Passwords do not match').isLength({ min: 1 }).trim(),
-
+    body('password2').custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error('Password confirmation does not match password');
+      }
+    }),
     sanitizeBody('*').escape(),
     (req, res, next) => {
     const errors = validationResult(req);

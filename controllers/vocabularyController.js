@@ -24,7 +24,6 @@ exports.vocabulary_list = function (req, res) {
 
 // Display detail page for a specific Genre.
 exports.vocabulary_detail = function (req, res, next) {
-
     async.parallel({
         vocabulary: (callback) => {
             Vocabulary.findById(req.params.id)
@@ -58,8 +57,6 @@ exports.vocabulary_create_get = function (req, res, next) {
   
 };
 
-// Handle Genre create on POST.
-// Handle Genre create on POST.
 // Handle Genre create on POST.
 exports.vocabulary_create_post = [
 
@@ -119,7 +116,7 @@ exports.vocabulary_create_post = [
         }
     }
 ];
-// Display Genre delete form on GET.
+
 // Display Genre delete form on GET.
 exports.vocabulary_delete_get = (req, res, next) => {
 

@@ -133,7 +133,7 @@ exports.genre_delete_get = function (req, res, next) {
                 'genre': req.params.id
             }).exec(callback);
         },
-    },  (err, results) => {
+    }, (err, results) => {
         if (err) {
             return next(err);
         }
@@ -154,7 +154,7 @@ exports.genre_delete_get = function (req, res, next) {
 exports.genre_delete_post = (req, res, next) => {
 
     async.parallel({
-        genre:  (callback) => {
+        genre: (callback) => {
             Genre.findById(req.params.id).exec(callback);
         },
         genre_books: function (callback) {
@@ -249,15 +249,15 @@ exports.genre_update_post = [
         } else {
             // Data from form is valid. Update the record.
             Genre.findByIdAndUpdate(req.params.id, genre)
-            .then(thegenre => {
-                // Successful - redirect to genre detail page
+                .then(thegenre => {
+                    // Successful - redirect to genre detail page
 
-                res.redirect(thegenre.url);
-            })
-            .catch(err => {
-                console.log(err);
+                    res.redirect(thegenre.url);
+                })
+                .catch(err => {
+                    console.log(err);
 
-            })
+                })
         }
     }
 ];

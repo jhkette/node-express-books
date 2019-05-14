@@ -166,11 +166,11 @@ exports.book_create_post = [
 
 
         // Extract the validation errors from a request.
-        let image  = ' ';
-        if(req.file !== undefined){
+        let image = ' ';
+        if (req.file !== undefined) {
             image = ref.file.filename;
         }
-    
+
         if (!errors.isEmpty()) {
             // There are errors. Render form again with sanitized values/error messages.
 

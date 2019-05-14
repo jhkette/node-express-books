@@ -19,6 +19,8 @@ desired but error message needed?
 
 - use book findById as opposed to findandupdate it will make it make it easier to save only relevant form fields. Important as image should not be updated in this case (see below)(DONE)
 
+- check if email is in use  https://express-validator.github.io/docs/custom-validators-sanitizers.html
+
 - check second password field for user
 
 
